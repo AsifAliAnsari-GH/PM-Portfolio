@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Terminal font */
+body {
+  font-family: 'Courier New', monospace;
+}
