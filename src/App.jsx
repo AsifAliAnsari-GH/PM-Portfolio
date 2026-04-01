@@ -516,7 +516,7 @@ export default function App() {
 
             <div className="flex flex-col gap-3">
               <a
-                href="public\resume (2).pdf"
+                href="\resume (2).pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`px-4 py-3 text-center font-semibold transition ${theme.buttonGhost}`}
@@ -525,7 +525,7 @@ export default function App() {
               </a>
 
               <a
-                href="public\resume (2).pdf"
+                href="\resume (2).pdf"
                 download="Asif_Ali_Ansari_Product_Resume.pdf"
                 className={`px-4 py-3 text-center font-semibold transition ${theme.buttonGhost}`}
               >
@@ -661,7 +661,7 @@ export default function App() {
                 <div className="profile-wave-ring-delay-2" />
                 <div className="profile-wave-core" />
                 <img
-                  src="public/Gemini_Generated_Image_gzhvn1gzhvn1gzhv.png"
+                  src="/Gemini_Generated_Image_gzhvn1gzhvn1gzhv.png"
                   alt="Asif Ali Ansari"
                   className={`relative z-10 w-28 h-28 sm:w-32 sm:h-32 md:w-44 md:h-44 rounded-full object-cover object-center border-2 bg-white ${theme.accentBorder}`}
                 />
