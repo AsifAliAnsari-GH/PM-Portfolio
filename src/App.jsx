@@ -94,6 +94,7 @@ export default function App() {
   const [displayText, setDisplayText] = useState("");
   const [index, setIndex] = useState(0);
   const [stars, setStars] = useState([]);
+  const [shootingStars, setShootingStars] = useState([]);
   const [reducedMotion, setReducedMotion] = useState(false);
 
   const fullName = "Asif Ali Ansari";
@@ -243,20 +244,32 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    const starCount = reducedMotion ? 12 : 30;
+  const starCount = reducedMotion ? 12 : 30;
 
-    const generatedStars = Array.from({ length: starCount }).map((_, i) => ({
-      id: i,
-      left: `${Math.random() * 100}%`,
-      top: `${Math.random() * 100}%`,
-      size: `${Math.random() * 3 + 1.5}px`,
-      animationDuration: `${Math.random() * 3 + 3.5}s`,
-      animationDelay: `${Math.random() * 3}s`,
-      opacity: Math.random() * 0.45 + 0.2,
-    }));
+  const generatedStars = Array.from({ length: starCount }).map((_, i) => ({
+    id: i,
+    left: `${Math.random() * 100}%`,
+    top: `${Math.random() * 100}%`,
+    size: `${Math.random() * 3 + 1.5}px`,
+    animationDuration: `${Math.random() * 3 + 3.5}s`,
+    animationDelay: `${Math.random() * 3}s`,
+    opacity: Math.random() * 0.45 + 0.2,
+  }));
 
-    setStars(generatedStars);
-  }, [reducedMotion]);
+  const generatedShootingStars = reducedMotion
+    ? []
+    : Array.from({ length: 4 }).map((_, i) => ({
+        id: i,
+        top: `${Math.random() * 45 + 5}%`,
+        left: `${Math.random() * 70}%`,
+        delay: `${Math.random() * 8}s`,
+        duration: `${Math.random() * 2 + 3.2}s`,
+        length: `${Math.random() * 120 + 90}px`,
+      }));
+
+  setStars(generatedStars);
+  setShootingStars(generatedShootingStars);
+}, [reducedMotion]);
 
   useEffect(() => {
     if (reducedMotion) {
@@ -363,6 +376,42 @@ export default function App() {
           .star-animate {
             animation: softTwinkle 4.5s ease-in-out infinite;
           }
+@keyframes shootingStar {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) rotate(25deg) scaleX(0.2);
+  }
+  10% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotate(25deg) scaleX(1);
+  }
+  70% {
+    opacity: 1;
+    transform: translate3d(260px, 120px, 0) rotate(25deg) scaleX(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(340px, 160px, 0) rotate(25deg) scaleX(0.6);
+  }
+}
+
+.shooting-star {
+  position: absolute;
+  height: 2px;
+  border-radius: 9999px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0),
+    rgba(187, 247, 208, 0.75),
+    rgba(34, 197, 94, 1),
+    rgba(255, 255, 255, 0.95)
+  );
+  box-shadow:
+    0 0 10px rgba(34, 197, 94, 0.55),
+    0 0 18px rgba(187, 247, 208, 0.35);
+  transform-origin: left center;
+  animation: shootingStar linear infinite;
+}
 
           @keyframes greenWave {
             0% {
@@ -426,11 +475,12 @@ export default function App() {
             }
 
             .star-animate,
-            .profile-wave-ring,
-            .profile-wave-ring-delay,
-            .profile-wave-ring-delay-2 {
-              animation: none !important;
-            }
+.shooting-star,
+.profile-wave-ring,
+.profile-wave-ring-delay,
+.profile-wave-ring-delay-2 {
+  animation: none !important;
+}
 
             * {
               transition-duration: 0.01ms !important;
@@ -459,7 +509,21 @@ export default function App() {
               boxShadow: "0 0 10px rgba(34,197,94,0.35)",
             }}
           />
-        ))}
+        ))
+        }
+        {shootingStars.map((star) => (
+  <div
+    key={star.id}
+    className="shooting-star"
+    style={{
+      top: star.top,
+      left: star.left,
+      width: star.length,
+      animationDelay: star.delay,
+      animationDuration: star.duration,
+    }}
+  />
+))}
       </div>
 
       <nav
