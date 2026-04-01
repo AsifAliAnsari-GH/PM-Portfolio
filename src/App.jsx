@@ -4,9 +4,9 @@ function Reveal({
   children,
   className = "",
   delay = 0,
-  y = 18,
+  y = 14,
   scale = 1,
-  duration = 650,
+  duration = 420,
   once = true,
 }) {
   const ref = useRef(null);
@@ -28,8 +28,8 @@ function Reveal({
         }
       },
       {
-        threshold: 0.12,
-        rootMargin: "0px 0px -48px 0px",
+        threshold: 0.1,
+        rootMargin: "0px 0px -32px 0px",
       }
     );
 
@@ -62,7 +62,7 @@ function Reveal({
 
 function MobileBottomNav({ navItems, activeSection, onNavigate }) {
   return (
-    <div className="fixed bottom-0 inset-x-0 z-[1100] lg:hidden px-3 pb-3">
+    <div className="fixed bottom-3 inset-x-0 z-[1100] lg:hidden px-3">
       <div className="grid grid-cols-5 rounded-2xl border backdrop-blur-xl shadow-lg overflow-hidden bg-white/95 border-green-100">
         {navItems.map((item) => {
           const isActive = activeSection === item.id;
@@ -94,7 +94,6 @@ export default function App() {
   const [displayText, setDisplayText] = useState("");
   const [index, setIndex] = useState(0);
   const [stars, setStars] = useState([]);
-  const [shootingStars, setShootingStars] = useState([]);
   const [reducedMotion, setReducedMotion] = useState(false);
 
   const fullName = "Asif Ali Ansari";
@@ -144,8 +143,8 @@ export default function App() {
           "Primary KPI: activation to first meaningful session",
           "Guardrail: recommendation relevance and completion rate",
         ],
-        pptLink: "#",
-        youtubeLink: "#",
+        pptLink: "",
+        youtubeLink: "",
       },
       {
         title: "Content Discovery Recommendation System",
@@ -163,8 +162,8 @@ export default function App() {
           "Success metric: deeper session engagement",
           "Business lens: retention and repeat usage",
         ],
-        pptLink: "#",
-        youtubeLink: "#",
+        pptLink: "",
+        youtubeLink: "",
       },
       {
         title: "Churn Insights and Retention Prioritization",
@@ -182,8 +181,8 @@ export default function App() {
           "Decision metric: retention intervention priority",
           "Outcome lens: user lifecycle improvement",
         ],
-        pptLink: "#",
-        youtubeLink: "#",
+        pptLink: "",
+        youtubeLink: "",
       },
     ],
     []
@@ -244,31 +243,19 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    const starCount = reducedMotion ? 40 : 80;
-    const shootingCount = reducedMotion ? 0 : 2;
+    const starCount = reducedMotion ? 12 : 30;
 
     const generatedStars = Array.from({ length: starCount }).map((_, i) => ({
       id: i,
       left: `${Math.random() * 100}%`,
-      top: `${Math.random() * -120}%`,
-      size: `${Math.random() * 2 + 0.8}px`,
-      animationDuration: `${Math.random() * 8 + 9}s`,
-      animationDelay: `${Math.random() * 10}s`,
-      opacity: Math.random() * 0.5 + 0.12,
+      top: `${Math.random() * 100}%`,
+      size: `${Math.random() * 3 + 1.5}px`,
+      animationDuration: `${Math.random() * 3 + 3.5}s`,
+      animationDelay: `${Math.random() * 3}s`,
+      opacity: Math.random() * 0.45 + 0.2,
     }));
 
     setStars(generatedStars);
-
-    const generatedShootingStars = Array.from({ length: shootingCount }).map((_, i) => ({
-      id: i,
-      left: `${Math.random() * 70}%`,
-      top: `${Math.random() * 24 + 8}%`,
-      delay: `${i * 5.5 + Math.random() * 1.5}s`,
-      duration: `${4.8 + Math.random() * 1.4}s`,
-      length: `${90 + Math.random() * 45}px`,
-    }));
-
-    setShootingStars(generatedShootingStars);
   }, [reducedMotion]);
 
   useEffect(() => {
@@ -282,7 +269,7 @@ export default function App() {
       setNameText(fullName.slice(0, i + 1));
       i += 1;
       if (i >= fullName.length) clearInterval(interval);
-    }, 85);
+    }, 80);
 
     return () => clearInterval(interval);
   }, [reducedMotion]);
@@ -304,9 +291,9 @@ export default function App() {
         clearInterval(interval);
         setTimeout(() => {
           setIndex((prev) => (prev + 1) % rotatingTexts.length);
-        }, 1400);
+        }, 1300);
       }
-    }, 35);
+    }, 32);
 
     return () => clearInterval(interval);
   }, [index, rotatingTexts, reducedMotion]);
@@ -322,15 +309,16 @@ export default function App() {
         const sections = ["home", "products", "experience", "education", "contact"];
         let current = "home";
 
-        sections.forEach((section) => {
+        for (const section of sections) {
           const el = document.getElementById(section);
-          if (!el) return;
+          if (!el) continue;
 
           const rect = el.getBoundingClientRect();
           if (rect.top <= 160 && rect.bottom >= 160) {
             current = section;
+            break;
           }
-        });
+        }
 
         setActiveSection(current);
         ticking = false;
@@ -358,7 +346,7 @@ export default function App() {
 
   return (
     <div
-      className={`min-h-screen font-mono relative overflow-x-hidden transition-colors duration-500 ${theme.page}`}
+      className={`min-h-screen font-mono relative overflow-x-hidden transition-colors duration-300 ${theme.page}`}
     >
       <style>
         {`
@@ -366,106 +354,70 @@ export default function App() {
             scroll-behavior: smooth;
           }
 
-          @keyframes customTwinkleAndMove {
-            0% {
-              opacity: 0;
-              transform: translate3d(0, -120px, 0) scale(0.7);
-            }
-            15% {
-              opacity: 0.25;
-            }
-            50% {
-              opacity: 0.65;
-              transform: translate3d(0, 50vh, 0) scale(1);
-            }
-            100% {
-              opacity: 0;
-              transform: translate3d(0, 115vh, 0) scale(0.85);
-            }
+          @keyframes softTwinkle {
+            0% { opacity: 0.18; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.25); }
+            100% { opacity: 0.18; transform: scale(1); }
           }
 
           .star-animate {
-            animation: customTwinkleAndMove linear infinite;
-            will-change: transform, opacity;
-            backface-visibility: hidden;
+            animation: softTwinkle 4.5s ease-in-out infinite;
           }
 
-          @keyframes shootingStarMove {
+          @keyframes greenWave {
             0% {
+              transform: scale(1);
+              opacity: 0.65;
+            }
+            70% {
+              transform: scale(1.22);
               opacity: 0;
-              transform: translate3d(0, 0, 0) rotate(25deg);
-            }
-            8% {
-              opacity: 0.95;
-            }
-            22% {
-              opacity: 0.95;
             }
             100% {
+              transform: scale(1.24);
               opacity: 0;
-              transform: translate3d(420px, 220px, 0) rotate(25deg);
             }
           }
 
-          .shooting-star-wrap {
-            position: absolute;
-            pointer-events: none;
-            will-change: transform, opacity;
-            animation: shootingStarMove linear infinite;
-            opacity: 0;
-            backface-visibility: hidden;
-          }
-
-          .shooting-star {
+          .profile-wave-wrap {
             position: relative;
-            height: 2px;
-            border-radius: 999px;
-            background: linear-gradient(
-              90deg,
-              rgba(34,197,94,0.02) 0%,
-              rgba(34,197,94,0.08) 18%,
-              rgba(34,197,94,0.18) 42%,
-              rgba(74,222,128,0.42) 68%,
-              rgba(187,247,208,0.92) 100%
-            );
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 9999px;
           }
 
-          .shooting-star::before {
-            content: "";
+          .profile-wave-ring,
+          .profile-wave-ring-delay,
+          .profile-wave-ring-delay-2 {
             position: absolute;
-            right: -3px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 6px;
-            height: 6px;
-            border-radius: 999px;
-            background: radial-gradient(
-              circle,
-              rgba(220,252,231,1) 0%,
-              rgba(134,239,172,0.9) 48%,
-              rgba(34,197,94,0.18) 78%,
-              transparent 100%
-            );
-            opacity: 0.95;
+            inset: -6px;
+            border-radius: 9999px;
+            border: 2px solid rgba(34, 197, 94, 0.72);
+            pointer-events: none;
           }
 
-          @media (max-width: 768px) {
-            @keyframes shootingStarMove {
-              0% {
-                opacity: 0;
-                transform: translate3d(0, 0, 0) rotate(25deg);
-              }
-              8% {
-                opacity: 0.95;
-              }
-              22% {
-                opacity: 0.95;
-              }
-              100% {
-                opacity: 0;
-                transform: translate3d(240px, 140px, 0) rotate(25deg);
-              }
-            }
+          .profile-wave-ring {
+            animation: greenWave 2.2s ease-out infinite;
+          }
+
+          .profile-wave-ring-delay {
+            animation: greenWave 2.2s ease-out infinite 0.7s;
+          }
+
+          .profile-wave-ring-delay-2 {
+            animation: greenWave 2.2s ease-out infinite 1.4s;
+          }
+
+          .profile-wave-core {
+            position: absolute;
+            inset: -2px;
+            border-radius: 9999px;
+            box-shadow:
+              0 0 0 1px rgba(34, 197, 94, 0.22),
+              0 0 18px rgba(34, 197, 94, 0.18),
+              0 0 32px rgba(34, 197, 94, 0.08);
+            pointer-events: none;
           }
 
           @media (prefers-reduced-motion: reduce) {
@@ -474,7 +426,9 @@ export default function App() {
             }
 
             .star-animate,
-            .shooting-star-wrap {
+            .profile-wave-ring,
+            .profile-wave-ring-delay,
+            .profile-wave-ring-delay-2 {
               animation: none !important;
             }
 
@@ -488,12 +442,12 @@ export default function App() {
       </style>
 
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        <div className="absolute inset-0 transition-opacity duration-700 bg-[radial-gradient(circle_at_top,rgba(187,247,208,0.32),transparent_28%),linear-gradient(180deg,#ffffff_0%,#f8fffb_55%,#f6fff9_100%)] opacity-100" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(187,247,208,0.24),transparent_28%),linear-gradient(180deg,#ffffff_0%,#f8fffb_55%,#f6fff9_100%)]" />
 
         {stars.map((star) => (
           <div
             key={star.id}
-            className="absolute rounded-full star-animate bg-green-400/70"
+            className="absolute rounded-full star-animate bg-green-500/90"
             style={{
               left: star.left,
               top: star.top,
@@ -502,29 +456,14 @@ export default function App() {
               animationDuration: star.animationDuration,
               animationDelay: star.animationDelay,
               opacity: star.opacity,
+              boxShadow: "0 0 10px rgba(34,197,94,0.35)",
             }}
           />
         ))}
-
-        {!reducedMotion &&
-          shootingStars.map((meteor) => (
-            <div
-              key={meteor.id}
-              className="shooting-star-wrap"
-              style={{
-                left: meteor.left,
-                top: meteor.top,
-                animationDelay: meteor.delay,
-                animationDuration: meteor.duration,
-              }}
-            >
-              <div className="shooting-star" style={{ width: meteor.length }} />
-            </div>
-          ))}
       </div>
 
       <nav
-        className={`fixed top-0 left-0 w-full z-50 border-b backdrop-blur-sm shadow-sm transition-colors duration-500 ${theme.nav}`}
+        className={`fixed top-0 left-0 w-full z-50 border-b backdrop-blur-sm shadow-sm transition-colors duration-300 ${theme.nav}`}
       >
         <div className="max-w-7xl mx-auto px-4 py-3 sm:py-4 flex justify-center items-center">
           <button
@@ -562,7 +501,7 @@ export default function App() {
           onClick={() => setShowResumeModal(false)}
         >
           <div
-            className={`w-full max-w-sm border shadow-lg p-5 sm:p-6 rounded-xl relative transition-colors duration-500 ${theme.card}`}
+            className={`w-full max-w-sm border shadow-lg p-5 sm:p-6 rounded-xl relative transition-colors duration-300 ${theme.card}`}
             onClick={(e) => e.stopPropagation()}
           >
             <button
@@ -577,7 +516,7 @@ export default function App() {
 
             <div className="flex flex-col gap-3">
               <a
-                href="/resume.pdf"
+                href="public\resume (2).pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`px-4 py-3 text-center font-semibold transition ${theme.buttonGhost}`}
@@ -586,7 +525,7 @@ export default function App() {
               </a>
 
               <a
-                href="/resume.pdf"
+                href="public\resume (2).pdf"
                 download="Asif_Ali_Ansari_Product_Resume.pdf"
                 className={`px-4 py-3 text-center font-semibold transition ${theme.buttonGhost}`}
               >
@@ -603,7 +542,7 @@ export default function App() {
           onClick={() => setSelectedProject(null)}
         >
           <div
-            className={`w-full max-w-3xl max-h-[88vh] overflow-y-auto border shadow-lg p-4 sm:p-6 md:p-8 rounded-xl relative transition-colors duration-500 ${theme.card}`}
+            className={`w-full max-w-3xl max-h-[88vh] overflow-y-auto border shadow-lg p-4 sm:p-6 md:p-8 rounded-xl relative transition-colors duration-300 ${theme.card}`}
             onClick={(e) => e.stopPropagation()}
           >
             <button
@@ -703,37 +642,42 @@ export default function App() {
           id="home"
           className="relative min-h-screen max-w-5xl mx-auto flex flex-col justify-center items-center text-center pt-20 pb-12 md:pt-20"
         >
-          <Reveal delay={50} y={10} duration={500}>
+          <Reveal delay={40}>
             <div
-              className={`mb-6 sm:mb-8 border px-3 sm:px-4 py-2 rounded-md shadow-sm text-[11px] sm:text-xs md:text-sm max-w-fit mx-auto transition-colors duration-500 ${theme.panel}`}
+              className={`mb-6 sm:mb-8 border px-3 sm:px-4 py-2 rounded-md shadow-sm text-[11px] sm:text-xs md:text-sm max-w-fit mx-auto transition-colors duration-300 ${theme.panel}`}
             >
-              <span className="mr-1">$</span>
               {displayText}
               {!reducedMotion && <span className="animate-pulse ml-1">|</span>}
             </div>
           </Reveal>
 
-          <Reveal delay={80} y={14} scale={0.99} duration={520}>
+          <Reveal delay={70}>
             <div
-              className={`rounded-full p-2 shadow-sm mb-6 sm:mb-8 border transition-colors duration-500 ${theme.panelSoft}`}
+              className={`rounded-full p-2 shadow-sm mb-6 sm:mb-8 border transition-colors duration-300 ${theme.panelSoft}`}
             >
-              <img
-                src="/profile.png"
-                alt="Asif Ali Ansari"
-                className={`w-28 h-28 sm:w-32 sm:h-32 md:w-44 md:h-44 rounded-full object-cover object-center border-2 bg-white ${theme.accentBorder}`}
-              />
+              <div className="profile-wave-wrap">
+                <div className="profile-wave-ring" />
+                <div className="profile-wave-ring-delay" />
+                <div className="profile-wave-ring-delay-2" />
+                <div className="profile-wave-core" />
+                <img
+                  src="public/Gemini_Generated_Image_gzhvn1gzhvn1gzhv.png"
+                  alt="Asif Ali Ansari"
+                  className={`relative z-10 w-28 h-28 sm:w-32 sm:h-32 md:w-44 md:h-44 rounded-full object-cover object-center border-2 bg-white ${theme.accentBorder}`}
+                />
+              </div>
             </div>
           </Reveal>
 
-          <Reveal delay={120} y={14} duration={520}>
+          <Reveal delay={100}>
             <p className={`text-[11px] sm:text-xs uppercase tracking-[0.22em] sm:tracking-[0.25em] mb-4 ${theme.accent}`}>
               APM / PRODUCT MANAGEMENT PORTFOLIO
             </p>
           </Reveal>
 
-          <Reveal delay={180} y={18} duration={560}>
+          <Reveal delay={130}>
             <h1
-              className={`text-3xl sm:text-4xl md:text-6xl font-bold min-h-[56px] sm:min-h-[64px] md:min-h-[88px] px-3 sm:px-4 py-2 rounded transition-colors duration-500 ${theme.panelSoft}`}
+              className={`text-3xl sm:text-4xl md:text-6xl font-bold min-h-[56px] sm:min-h-[64px] md:min-h-[88px] px-3 sm:px-4 py-2 rounded transition-colors duration-300 ${theme.panelSoft}`}
             >
               {nameText}
               {!reducedMotion && nameText.length < fullName.length && (
@@ -742,27 +686,27 @@ export default function App() {
             </h1>
           </Reveal>
 
-          <Reveal delay={240} y={18} duration={560}>
+          <Reveal delay={160}>
             <p
-              className={`mt-5 text-base sm:text-lg md:text-xl max-w-3xl px-3 py-2 rounded leading-7 sm:leading-8 md:leading-9 transition-colors duration-500 ${theme.panelSoft} ${theme.textMain}`}
+              className={`mt-5 text-base sm:text-lg md:text-xl max-w-3xl px-3 py-2 rounded leading-7 sm:leading-8 md:leading-9 transition-colors duration-300 ${theme.panelSoft} ${theme.textMain}`}
             >
               Aspiring Product Manager focused on AI, data-driven products, and
               turning ambiguous problems into clear product opportunities.
             </p>
           </Reveal>
 
-          <Reveal delay={300} y={18} duration={560}>
+          <Reveal delay={190}>
             <p
-              className={`mt-4 max-w-2xl px-3 py-2 rounded text-sm sm:text-base leading-7 transition-colors duration-500 ${theme.panelSoft} ${theme.textSub}`}
+              className={`mt-4 max-w-2xl px-3 py-2 rounded text-sm sm:text-base leading-7 transition-colors duration-300 ${theme.panelSoft} ${theme.textSub}`}
             >
               I bring a technical foundation in AI and data science, and I’m building
               toward APM / PM roles where product thinking, user empathy, and execution matter.
             </p>
           </Reveal>
 
-          <Reveal delay={360} y={18} duration={560}>
+          <Reveal delay={220}>
             <div
-              className={`grid grid-cols-1 sm:grid-cols-3 w-full sm:w-auto gap-3 mt-8 p-3 rounded-xl transition-colors duration-500 ${theme.panelSoft}`}
+              className={`grid grid-cols-1 sm:grid-cols-3 w-full sm:w-auto gap-3 mt-8 p-3 rounded-xl transition-colors duration-300 ${theme.panelSoft}`}
             >
               <button
                 onClick={() => setShowResumeModal(true)}
@@ -781,7 +725,7 @@ export default function App() {
               </a>
 
               <a
-                href="https://github.com/yourusername"
+                href="https://github.com/AsifAliAnsari-GH"
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`w-full px-6 py-3 text-sm font-semibold transition text-center ${theme.buttonGhost}`}
@@ -792,22 +736,22 @@ export default function App() {
           </Reveal>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full max-w-4xl mt-10 md:mt-14">
-            <Reveal delay={120} y={16} duration={520}>
-              <div className={`p-5 text-left border transition-colors duration-500 ${theme.cardSoft}`}>
+            <Reveal delay={80}>
+              <div className={`p-5 text-left border transition-colors duration-300 ${theme.cardSoft}`}>
                 <p className={`text-xs uppercase tracking-wider mb-2 ${theme.textMuted}`}>Focus</p>
                 <p className={`font-semibold ${theme.textMain}`}>AI Products, Discovery, User Value</p>
               </div>
             </Reveal>
 
-            <Reveal delay={180} y={16} duration={520}>
-              <div className={`p-5 text-left border transition-colors duration-500 ${theme.cardSoft}`}>
+            <Reveal delay={120}>
+              <div className={`p-5 text-left border transition-colors duration-300 ${theme.cardSoft}`}>
                 <p className={`text-xs uppercase tracking-wider mb-2 ${theme.textMuted}`}>Strength</p>
                 <p className={`font-semibold ${theme.textMain}`}>Technical Depth + Product Framing</p>
               </div>
             </Reveal>
 
-            <Reveal delay={240} y={16} duration={520}>
-              <div className={`p-5 text-left border transition-colors duration-500 ${theme.cardSoft}`}>
+            <Reveal delay={160}>
+              <div className={`p-5 text-left border transition-colors duration-300 ${theme.cardSoft}`}>
                 <p className={`text-xs uppercase tracking-wider mb-2 ${theme.textMuted}`}>Goal</p>
                 <p className={`font-semibold ${theme.textMain}`}>APM / PM Roles in Product-Led Teams</p>
               </div>
@@ -819,9 +763,9 @@ export default function App() {
           id="products"
           className="min-h-screen max-w-6xl mx-auto py-16 md:py-24 flex flex-col justify-center"
         >
-          <Reveal y={22} duration={560}>
+          <Reveal>
             <div
-              className={`mb-10 md:mb-12 p-4 rounded-lg border self-start transition-colors duration-500 ${theme.panelSoft}`}
+              className={`mb-10 md:mb-12 p-4 rounded-lg border self-start transition-colors duration-300 ${theme.panelSoft}`}
             >
               <p className={`text-xs uppercase tracking-[0.2em] mb-2 ${theme.textMuted}`}>
                 Portfolio Highlights
@@ -838,7 +782,7 @@ export default function App() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 md:gap-6">
             {projects.map((project, i) => (
-              <Reveal key={i} delay={i * 90} y={20} scale={0.99} duration={520}>
+              <Reveal key={i} delay={i * 60}>
                 <button
                   onClick={() => setSelectedProject(project)}
                   className={`relative text-left border border-dashed p-5 sm:p-6 transition flex flex-col min-h-[unset] sm:min-h-[420px] w-full ${theme.buttonCard}`}
@@ -852,7 +796,7 @@ export default function App() {
                   )}
 
                   <div
-                    className={`w-full h-24 sm:h-28 mb-5 border flex items-center justify-center transition-colors duration-500 ${theme.cardSoft}`}
+                    className={`w-full h-24 sm:h-28 mb-5 border flex items-center justify-center transition-colors duration-300 ${theme.cardSoft}`}
                   >
                     <img
                       src={project.companyImage}
@@ -904,9 +848,9 @@ export default function App() {
           id="experience"
           className="min-h-screen max-w-4xl mx-auto py-16 md:py-24 flex flex-col justify-center"
         >
-          <Reveal y={22} duration={560}>
+          <Reveal>
             <div
-              className={`mb-10 md:mb-12 p-4 rounded-lg border self-start transition-colors duration-500 ${theme.panelSoft}`}
+              className={`mb-10 md:mb-12 p-4 rounded-lg border self-start transition-colors duration-300 ${theme.panelSoft}`}
             >
               <p className={`text-xs uppercase tracking-[0.2em] mb-2 ${theme.textMuted}`}>
                 Career Journey
@@ -918,9 +862,9 @@ export default function App() {
           </Reveal>
 
           <div
-            className={`border-l-2 pl-5 sm:pl-8 space-y-10 sm:space-y-12 p-4 sm:p-6 md:p-8 rounded-lg transition-colors duration-500 ${theme.panelSoft} ${theme.accentBorder}`}
+            className={`border-l-2 pl-5 sm:pl-8 space-y-10 sm:space-y-12 p-4 sm:p-6 md:p-8 rounded-lg transition-colors duration-300 ${theme.panelSoft} ${theme.accentBorder}`}
           >
-            <Reveal delay={70} y={18} duration={520}>
+            <Reveal delay={40}>
               <div className="relative">
                 <div
                   className={`absolute -left-[27px] sm:-left-[41px] top-1 w-3 h-3 sm:w-4 sm:h-4 border-2 rounded-full ${theme.timelineDot}`}
@@ -940,7 +884,7 @@ export default function App() {
               </div>
             </Reveal>
 
-            <Reveal delay={130} y={18} duration={520}>
+            <Reveal delay={80}>
               <div className="relative">
                 <div
                   className={`absolute -left-[27px] sm:-left-[41px] top-1 w-3 h-3 sm:w-4 sm:h-4 border-2 rounded-full ${theme.timelineDot}`}
@@ -957,7 +901,7 @@ export default function App() {
               </div>
             </Reveal>
 
-            <Reveal delay={190} y={18} duration={520}>
+            <Reveal delay={120}>
               <div className="relative">
                 <div
                   className={`absolute -left-[27px] sm:-left-[41px] top-1 w-3 h-3 sm:w-4 sm:h-4 border-2 rounded-full ${theme.timelineDot}`}
@@ -980,9 +924,9 @@ export default function App() {
           id="education"
           className="min-h-screen max-w-6xl mx-auto py-16 md:py-24 flex flex-col justify-center"
         >
-          <Reveal y={22} duration={560}>
+          <Reveal>
             <div
-              className={`mb-10 md:mb-12 p-4 rounded-lg border self-start transition-colors duration-500 ${theme.panelSoft}`}
+              className={`mb-10 md:mb-12 p-4 rounded-lg border self-start transition-colors duration-300 ${theme.panelSoft}`}
             >
               <p className={`text-xs uppercase tracking-[0.2em] mb-2 ${theme.textMuted}`}>
                 Foundation
@@ -994,8 +938,8 @@ export default function App() {
           </Reveal>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
-            <Reveal delay={70} y={18} scale={0.992} duration={520}>
-              <div className={`border p-5 sm:p-6 transition-colors duration-500 ${theme.card}`}>
+            <Reveal delay={40}>
+              <div className={`border p-5 sm:p-6 transition-colors duration-300 ${theme.card}`}>
                 <h3 className="font-bold text-lg mb-2">M.Tech in Data Science</h3>
                 <p className={`font-semibold ${theme.accent}`}>Amity University</p>
                 <p className={`text-sm mt-3 ${theme.textMuted}`}>Aug 2023 - Jun 2025</p>
@@ -1006,8 +950,8 @@ export default function App() {
               </div>
             </Reveal>
 
-            <Reveal delay={130} y={18} scale={0.992} duration={520}>
-              <div className={`border p-5 sm:p-6 transition-colors duration-500 ${theme.card}`}>
+            <Reveal delay={80}>
+              <div className={`border p-5 sm:p-6 transition-colors duration-300 ${theme.card}`}>
                 <h3 className="font-bold text-lg mb-2">Master of Computer Applications</h3>
                 <p className={`font-semibold ${theme.accent}`}>Jamia Hamdard University</p>
                 <p className={`text-sm mt-3 ${theme.textMuted}`}>Aug 2021 - Apr 2023</p>
@@ -1018,8 +962,8 @@ export default function App() {
               </div>
             </Reveal>
 
-            <Reveal delay={190} y={18} scale={0.992} duration={520}>
-              <div className={`border p-5 sm:p-6 transition-colors duration-500 ${theme.card}`}>
+            <Reveal delay={120}>
+              <div className={`border p-5 sm:p-6 transition-colors duration-300 ${theme.card}`}>
                 <h3 className="font-bold text-lg mb-2">Bachelor of Computer Applications</h3>
                 <p className={`font-semibold ${theme.accent}`}>Jamia Hamdard University</p>
                 <p className={`text-sm mt-3 ${theme.textMuted}`}>Aug 2018 - Apr 2021</p>
@@ -1034,11 +978,11 @@ export default function App() {
 
         <section
           id="contact"
-          className="min-h-screen max-w-3xl mx-auto py-16 md:py-24 pb-28 sm:pb-32 flex flex-col justify-center"
+          className="min-h-screen max-w-3xl mx-auto py-16 md:py-24 pb-40 sm:pb-44 flex flex-col justify-center"
         >
-          <Reveal y={22} duration={560}>
+          <Reveal>
             <div
-              className={`p-4 rounded-lg border self-start mb-8 transition-colors duration-500 ${theme.panelSoft}`}
+              className={`p-4 rounded-lg border self-start mb-8 transition-colors duration-300 ${theme.panelSoft}`}
             >
               <p className={`text-xs uppercase tracking-[0.2em] mb-2 ${theme.textMuted}`}>
                 Reach Out
@@ -1049,9 +993,9 @@ export default function App() {
             </div>
           </Reveal>
 
-          <Reveal delay={80} y={18} duration={520}>
+          <Reveal delay={40}>
             <form
-              className={`border p-5 sm:p-6 md:p-8 flex flex-col gap-5 sm:gap-6 transition-colors duration-500 ${theme.card}`}
+              className={`border p-5 sm:p-6 md:p-8 flex flex-col gap-5 sm:gap-6 transition-colors duration-300 ${theme.card}`}
             >
               <input
                 type="text"
@@ -1077,7 +1021,7 @@ export default function App() {
 
                 {isDropdownOpen && (
                   <div
-                    className={`absolute top-full left-0 w-full mt-1 shadow-lg z-50 border transition-colors duration-500 ${theme.card}`}
+                    className={`absolute top-full left-0 w-full mt-1 shadow-lg z-50 border transition-colors duration-300 ${theme.card}`}
                   >
                     {dropdownOptions.map((option, idx) => (
                       <button
@@ -1112,7 +1056,7 @@ export default function App() {
           </Reveal>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
-            <Reveal delay={120} y={16} duration={500}>
+            <Reveal delay={60}>
               <a
                 href="mailto:yourmail@example.com"
                 className={`border p-4 transition block ${theme.cardSoft}`}
@@ -1122,7 +1066,7 @@ export default function App() {
               </a>
             </Reveal>
 
-            <Reveal delay={180} y={16} duration={500}>
+            <Reveal delay={100}>
               <a
                 href="https://linkedin.com/in/asifaliansari-pm"
                 target="_blank"
@@ -1138,7 +1082,7 @@ export default function App() {
       </main>
 
       <footer
-        className={`relative z-20 text-center p-5 sm:p-6 border-t text-xs sm:text-sm transition-colors duration-500 ${theme.footer}`}
+        className={`relative z-20 text-center p-5 sm:p-6 pb-24 sm:pb-6 border-t text-xs sm:text-sm transition-colors duration-300 ${theme.footer}`}
       >
         Designed for Product. Built with intent.
       </footer>
